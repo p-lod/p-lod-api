@@ -20,7 +20,7 @@ def information_about_an_id(p_lod_id: str, q: Union[str, None] = None):
 
     return [{row.name:row['o']} for i,row in r._id_df.iterrows()]
 
-@app.get("/conceptual_ancestors/{p_lod_id}")
+@app.get("/conceptual-ancestors/{p_lod_id}")
 def get_conceptual_ancestors(p_lod_id: str):
     """Return a json array of dictionaries that indicate the conceptual ancestors of a P-LOD ID.
     
@@ -29,7 +29,7 @@ def get_conceptual_ancestors(p_lod_id: str):
 
     return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).conceptual_ancestors()
 
-@app.get("/conceptual_children/{p_lod_id}")
+@app.get("/conceptual-children/{p_lod_id}")
 def get_conceptual_children(p_lod_id: str):
     """Return a json array of dictionaries that indicate the direct conceptual children of a P-LOD ID. It does not include all descendants.
     
@@ -38,7 +38,7 @@ def get_conceptual_children(p_lod_id: str):
 
     return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).conceptual_children()
 
-@app.get("/depicted_where/{p_lod_id}")
+@app.get("/depicted-where/{p_lod_id}")
 def id_is_depicted_where(p_lod_id: str):
     """Return json arrays that list the spatial units where a concept (or other?) is depicted.
     
@@ -48,7 +48,7 @@ def id_is_depicted_where(p_lod_id: str):
 
     return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).depicted_where()
 
-@app.get('/depicts_concepts/{p_lod_id}')
+@app.get('/depicts-concepts/{p_lod_id}')
 def id_depicts_concepts(p_lod_id: str):
     """Return json arrays that list the concepts depicted by artwork in a spatial unit.
     
