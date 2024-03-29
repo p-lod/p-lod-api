@@ -6,11 +6,11 @@ from fastapi import FastAPI
 app = FastAPI()
 
 @app.get("/")
-def read_root():
+def not_implemented():
     return "Nothing here. Try /id/pompeii ."
 
 @app.get("/id/{p_lod_id}")
-def read_id(p_lod_id: str, q: Union[str, None] = None):
+def information_about_an_id(p_lod_id: str, q: Union[str, None] = None):
     """Return an array of dictionaries describing a P-LOD ID. The key of each dictionary is the predicate, and the value is the object.
     
     The format of the returned JSON is under development and may change.
@@ -20,9 +20,27 @@ def read_id(p_lod_id: str, q: Union[str, None] = None):
 
     return [{row.name:row['o']} for i,row in r._id_df.iterrows()]
 
+@app.get("/conceptual_ancestors/{p_lod_id}")
+def get_conceptual_ancestors(p_lod_id: str):
+    """Return a json array of dictionaries that indicate the conceptual ancestors of a P-LOD ID.
+    
+    The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls.
+    """
+
+    return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).conceptual_ancestors()
+
+@app.get("/conceptual_children/{p_lod_id}")
+def get_conceptual_children(p_lod_id: str):
+    """Return a json array of dictionaries that indicate the direct conceptual children of a P-LOD ID. It does not include all descendants.
+    
+    The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls.
+    """
+
+    return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).conceptual_children()
+
 @app.get("/depicted_where/{p_lod_id}")
-def read_depicted_where(p_lod_id: str):
-    """Return json arrays that list the spaital units where a concept (or other?) is depicted.
+def id_is_depicted_where(p_lod_id: str):
+    """Return json arrays that list the spatial units where a concept (or other?) is depicted.
     
     Examples: /depicted_where/ariadne , /depicted_where/urn:p-lod:id:ariadne
     
@@ -31,20 +49,52 @@ def read_depicted_where(p_lod_id: str):
     return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).depicted_where()
 
 @app.get('/depicts_concepts/{p_lod_id}')
-def read_depicts_concepts(p_lod_id: str):
+def id_depicts_concepts(p_lod_id: str):
     """Return json arrays that list the concepts depicted by artwork in a spatial unit.
     
     The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls."""
 
     return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).depicts_concepts()
 
+@app.get('/images/{p_lod_id}')
+def gather_images(p_lod_id: str):
+    """Returns an array of json dictionaries, each of which describes an image relevant to the P-LOD identifier. This is meant as a general purpose tool to gather many images.
+    
+    The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls.
+    
+    Each dictionary has a urn key that identifies the image."""
 
+    return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).gather_images()
 
 @app.get('/geojson/{p_lod_id}')
-def read_geojson(p_lod_id):
+def get_geojson(p_lod_id):
   """Return a GeoJSON representation of a P-LOD ID.
   
   It should be possible to use the GeoJSON directly."""
 
   return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).geojson
 
+@app.get('/spatial-ancestors/{p_lod_id}')
+def get_spatial_ancestors(p_lod_id):
+  """Return a json array of dictionaries that indicate the spatial ancestors of a P-LOD ID.
+  
+  The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls.
+  
+  Each dictionary currently has a urn, label, type, and geojson key.
+
+  For the time being, the first element in the array is the P-LOD ID itself. The last element is Pompeii. Including both everytime is inefficient and this may change.
+  """
+
+  return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).spatial_ancestors()
+
+@app.get('/spatial-children/{p_lod_id}')
+def get_spatial_children(p_lod_id):
+  """Return a json array of dictionaries that indicate the direct spatial children of a P-LOD ID. It does not include all descendants.
+  
+  The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls.
+  
+  
+  For the time being, the first element in the array is the P-LOD ID itself. The last element is Pompeii. Including both everytime is inefficient and this may change.
+  """
+
+  return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).spatial_children()
