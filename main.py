@@ -7,7 +7,9 @@ app = FastAPI()
 
 @app.get("/")
 def not_implemented():
-    return "Nothing here. Try /id/pompeii ."
+    """Not implemented. Only a brief message is returned."""
+    return """Nothing here. Try /id/pompeii . See /docs for documentation. One quick note: 
+    In general you pass either simple ids ('pompeii') or urns ('urn:p-lod:id:pompeii') to the API."""
 
 @app.get("/id/{p_lod_id}")
 def information_about_an_id(p_lod_id: str, q: Union[str, None] = None):
