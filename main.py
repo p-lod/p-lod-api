@@ -14,6 +14,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# if it turns out to be necessary add caching here. so far performance is fine without it.
+
 @app.get("/")
 def not_implemented():
     """Not implemented. Only a brief message is returned."""
@@ -48,6 +50,15 @@ def get_conceptual_children(p_lod_id: str):
     """
 
     return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).conceptual_children()
+
+@app.get("/conceptual-descendants/{p_lod_id}")
+def get_conceptual_children(p_lod_id: str):
+    """Return a json array of dictionaries that indicate the conceptual descendants of a P-LOD ID.
+    
+    The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls.
+    """
+
+    return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).conceptual_descendants()
 
 @app.get("/depicted-where/{p_lod_id}")
 def id_is_depicted_where(p_lod_id: str):
