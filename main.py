@@ -52,7 +52,7 @@ def get_conceptual_children(p_lod_id: str):
     return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).conceptual_children()
 
 @app.get("/conceptual-descendants/{p_lod_id}")
-def get_conceptual_children(p_lod_id: str):
+def get_conceptual_descendants(p_lod_id: str):
     """Return a json array of dictionaries that indicate the conceptual descendants of a P-LOD ID.
     
     The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls.
