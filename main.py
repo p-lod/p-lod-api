@@ -33,6 +33,7 @@ def information_about_an_id(p_lod_id: str, q: Union[str, None] = None):
 
     return [{row.name:row['o']} for i,row in r._id_df.iterrows()]
 
+
 @app.get("/as-object/{p_lod_id}")
 def get_as_object(p_lod_id: str):
     """JSON array of uses of the P-LOD ID as an object in an RDF triple.
@@ -61,6 +62,7 @@ def get_conceptual_ancestors(p_lod_id: str):
     """
 
     return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).conceptual_ancestors()
+
 
 @app.get("/conceptual-children/{p_lod_id}")
 def get_conceptual_children(p_lod_id: str):
