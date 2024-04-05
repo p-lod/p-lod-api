@@ -96,6 +96,15 @@ def get_geojson(p_lod_id):
 
   return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).geojson
 
+@app.get('/instances-of/{p_lod_id}')
+def get_instances_of(p_lod_id):
+  """Return a json array of dictionaries that indicate the instances of a P-LOD ID.
+  
+  The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls.
+  """
+
+  return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).instances_of()
+
 @app.get('/spatial-ancestors/{p_lod_id}')
 def get_spatial_ancestors(p_lod_id):
   """Return a json array of dictionaries that indicate the spatial ancestors of a P-LOD ID.
