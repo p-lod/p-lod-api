@@ -20,8 +20,8 @@ app.add_middleware(
 @app.get("/")
 def not_implemented():
     """Not implemented. Only a brief message is returned."""
-    return """Nothing here. Try /id/pompeii . See /docs for documentation. One quick note: 
-    In general you pass either simple ids ('pompeii') or urns ('urn:p-lod:id:pompeii') to the API."""
+    return """Nothing here. Try /id/pompeii or /id/pompeii.ttl , or maybe /geojson/pompeii . See /docs for documentation. One quick note: 
+    In general, you can pass either simple ids ('pompeii') or urns ('urn:p-lod:id:pompeii') to the API."""
 
 class CustomTTLResponse(Response):
     media_type = "text/turtle"
@@ -143,6 +143,15 @@ def get_instances_of(p_lod_id):
   """
 
   return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).instances_of()
+
+
+@app.get('/see-also/{p_lod_id}.ttl', response_class=CustomTTLResponse)
+def get_see_also_ttl(p_lod_id):
+  """Return an RDF representation of the seeAlso links for a P-LOD ID serialized as Turtle and with mimetype set to text/turtle."""
+  rdf_data = plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).see_also()
+  response = Response(content=rdf_data, media_type="text/turtle")
+  return response
+
 
 @app.get('/spatial-ancestors/{p_lod_id}')
 def get_spatial_ancestors(p_lod_id):
