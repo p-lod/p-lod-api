@@ -100,14 +100,14 @@ def get_conceptual_descendants(p_lod_id: str):
     return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).conceptual_descendants()
 
 @app.get("/depicted-where/{p_lod_id}")
-def id_is_depicted_where(p_lod_id: str):
+def id_is_depicted_where(p_lod_id: str, level_of_detail: str = 'feature'):
     """Return json arrays that list the spatial units where a concept (or other?) is depicted.
     
     Examples: /depicted_where/ariadne , /depicted_where/urn:p-lod:id:ariadne
     
     The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls."""
 
-    return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).depicted_where()
+    return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).depicted_where(level_of_detail=level_of_detail)
 
 @app.get('/depicts-concepts/{p_lod_id}')
 def id_depicts_concepts(p_lod_id: str):
@@ -147,7 +147,9 @@ def get_instances_of(p_lod_id):
 
 @app.get('/see-also/{p_lod_id}.ttl', response_class=CustomTTLResponse)
 def get_see_also_ttl(p_lod_id):
-  """Return an RDF representation of the seeAlso links for a P-LOD ID serialized as Turtle and with mimetype set to text/turtle."""
+  """Return an RDF representation of the seeAlso links for a P-LOD ID serialized as Turtle and with mimetype set to text/turtle.
+  
+  The triples are rendered with rdfs:seeAlso as the predicate and the original triple with P-LOD predicate is also returned."""
   rdf_data = plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).see_also()
   response = Response(content=rdf_data, media_type="text/turtle")
   return response
