@@ -169,13 +169,13 @@ def get_spatial_ancestors(p_lod_id):
   return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).spatial_ancestors()
 
 @app.get('/spatial-children/{p_lod_id}')
-def get_spatial_children(p_lod_id):
+def get_spatial_children(p_lod_id, rdf_type: str = 'all', exclude_rdf_type: str = ''):
   """Return a json array of dictionaries that indicate the direct spatial children of a P-LOD ID. It does not include all descendants.
   
   The format of the returned JSON is under development and may change. A focus of current development is consistency across API calls.
   
   
-  For the time being, the first element in the array is the P-LOD ID itself. The last element is Pompeii. Including both everytime is inefficient and this may change.
+  For the time being, the first element in the array is the P-LOD ID itself. The last element is Pompeii. Including both every time is inefficient and this may change.
   """
 
-  return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).spatial_children()
+  return plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:','')).spatial_children(rdf_type=rdf_type, exclude_rdf_type=exclude_rdf_type)
