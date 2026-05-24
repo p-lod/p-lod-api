@@ -43,7 +43,12 @@ def information_about_an_id(p_lod_id: str, q: Union[str, None] = None, accept: A
     The format of the returned JSON is under development and may change.
     """   
 
-    if accept == 'text/turtle':
+    accepts_turtle = bool(accept) and any(
+        part.strip().split(';', 1)[0] == 'text/turtle'
+        for part in accept.split(',')
+    )
+
+    if accepts_turtle:
         return RedirectResponse(url=f'/id/{p_lod_id}.ttl')
 
     r = plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:',''))
