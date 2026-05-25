@@ -53,7 +53,7 @@ def information_about_an_id(p_lod_id: str, q: Union[str, None] = None, accept: A
 
     r = plodlib.PLODResource(p_lod_id.replace('urn:p-lod:id:',''))
 
-    return [{row.name:row['o']} for i,row in r._id_df.iterrows()]
+    return [{p: o} for p, vals in r._predicates.items() for o in vals]
 
 
 @app.get("/as-object/{p_lod_id}")
