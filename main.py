@@ -8,7 +8,7 @@ from fastapi.responses import Response, RedirectResponse
 # On-disk SPARQL result cache. 30-minute TTL by default; 100 MB cap, LRU
 # eviction. Set an absolute directory in prod (e.g. /var/lib/plod/cache)
 # if the working dir is not persistent.
-plodlib.enable_cache()
+plodlib.enable_cache(ttl_sec=60*120)
 
 app = FastAPI()
 
