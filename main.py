@@ -5,6 +5,11 @@ from fastapi import FastAPI, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, RedirectResponse
 
+# On-disk SPARQL result cache. 30-minute TTL by default; 100 MB cap, LRU
+# eviction. Set an absolute directory in prod (e.g. /var/lib/plod/cache)
+# if the working dir is not persistent.
+plodlib.enable_cache()
+
 app = FastAPI()
 
 app.add_middleware(
@@ -14,8 +19,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# if it turns out to be necessary add caching here. so far performance is fine without it.
 
 @app.get("/")
 def not_implemented():
